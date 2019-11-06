@@ -13,6 +13,9 @@ using namespace sf;
  * - 11 represents a Jack
  * - 12 represents a Oueen
  * - 13 represents a King
+ * 
+ * @relatesalso Suit
+ * @relatesalso Card
  */
 #define CardValue int
 /**
@@ -21,6 +24,9 @@ using namespace sf;
  * - 1 represents Diamonds
  * - 2 represents Spades
  * - 3 represents Hearts
+ * 
+ * @relatesalso CardValue
+ * @relatesalso Card
  */
 #define Suit int
 /**
@@ -29,6 +35,9 @@ using namespace sf;
  * A makeCard(first, second) where:
  * - first represents the value of the card
  * - second represents the suit of the card
+ * 
+ * @relatesalso CardValue
+ * @relatesalso Suit
  */
 #define Card std::pair<CardValue,Suit>
 #define makeCard std::make_pair
@@ -36,6 +45,8 @@ using namespace sf;
  * A Hand is a std::vector<Card >
  * 
  * A hand represents a collection of cards.
+ * 
+ * @relatesalso Card
  */
 #define Hand std::vector<Card >
 
