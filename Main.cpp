@@ -5,15 +5,73 @@
 
 using namespace sf;
 
-#define Card std::pair<int,int>
+// Data definitions:
+/**
+ * A CardValue is an int in the range [1, 13] where:
+ * - 1 represents an Ace
+ * - [2, 10] represents the number card
+ * - 11 represents a Jack
+ * - 12 represents a Oueen
+ * - 13 represents a King
+ */
+#define CardValue int
+/**
+ * A Suit is an int in the range [0, 3] where:
+ * - 0 represents Clubs
+ * - 1 represents Diamonds
+ * - 2 represents Spades
+ * - 3 represents Hearts
+ */
+#define Suit int
+/**
+ * A Card is a std::pair<CardValue,Suit>
+ * 
+ * A makeCard(first, second) where:
+ * - first represents the value of the card
+ * - second represents the suit of the card
+ */
+#define Card std::pair<CardValue,Suit>
 #define makeCard std::make_pair
+/**
+ * A Hand is a std::vector<Card >
+ * 
+ * A hand represents a collection of cards.
+ */
 #define Hand std::vector<Card >
 
+// Constants:
+/**
+ * Number of standard 52-card decks to be played with.
+ *
+ * @hideinitializer
+ */
 const int deckCount = 1;
+/**
+ * Size of card assets.
+ *
+ * @hideinitializer
+ */
 const int cardWidth = 140, cardHeight = 190;
+/**
+ * Position of the center of a card relative to TOP LEFT.
+ *
+ * @hideinitializer
+ */
 const Vector2f middleCard(cardWidth/2, cardHeight/2);
+/**
+ * Number of pixels to offset stacked cards so bottom card is still readable.
+ *
+ * @hideinitializer
+ */
 const float cardStackOff = cardWidth/3.5f;
+/**
+ * Card representing the absence of a card.
+ *
+ * @hideinitializer
+ */
 const Card NULL_CARD = makeCard(-1, -1);
+
+// Header for functions defined below main:
 void shuffleDeck(Hand* deck);
 Card drawCard(Hand* deck, int* i, const int deckSize);
 int maxHandValueNoBust(Hand* hand);
@@ -135,6 +193,11 @@ int main() {
     return 0;
 }
 
+/**
+ * Randomly shuffle a deck of cards.
+ *
+ * @param deck : pointer to a vector of Cards.
+ */
 void shuffleDeck(Hand* deck) {
     std::random_device rd;
     std::mt19937 g(rd());
@@ -142,6 +205,15 @@ void shuffleDeck(Hand* deck) {
     std::shuffle((*deck).begin(), (*deck).end(), g);
 }
 
+/**
+ * Return the next Card in the deck,
+ * if no next card exists, return NULL_CARD.
+ *
+ * @param deck : pointer to a vector of Cards.
+ * @param i : pointer to index of next Card.
+ * @param deckSize : total number of cards in the deck.
+ * @return : next Card in the deck.
+ */
 Card drawCard(Hand* deck, int* i, const int deckSize) {
     if((*i) < deckSize) {
         Card c = (*deck).at((*i));
@@ -151,6 +223,13 @@ Card drawCard(Hand* deck, int* i, const int deckSize) {
     return NULL_CARD;
 }
 
+/**
+ * Return the value of a hand closest to 21 without going over,
+ * if no value exists that is at most 21, return the lowest value.
+ *
+ * @param hand : pointer to a vector of Cards.
+ * @return : sum of Card values.
+ */
 int maxHandValueNoBust(Hand* hand) {
     const int handSize = (*hand).size();
     int value = 0;
@@ -168,6 +247,15 @@ int maxHandValueNoBust(Hand* hand) {
     return value;
 }
 
+/**
+ * Render a Card onto the window at pos, rotate card if it should be sideways.
+ *
+ * @param window : pointer to the sfml RenderWindow.
+ * @param cardSpritesheet : pointer to the cardSpritesheet Texture.
+ * @param card : pointer to the Card to draw.
+ * @param pos : position to place the card in the window.
+ * @param rotate : should the card be rotated?
+ */
 void renderCard(RenderWindow* window, Texture* cardSpritesheet, Card* card, Vector2f pos, bool rotate) {
     Sprite cardSprite((*cardSpritesheet));
     cardSprite.setTextureRect(IntRect(((*card).first-1)*cardWidth, (*card).second*cardHeight, cardWidth, cardHeight));
